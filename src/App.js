@@ -31,8 +31,8 @@ function App() {
 						path="/"
 						component={Products}
 					    />
-				        )}
-			            />
+				        {/* )}
+			            /> */}
 
 			         <Route
 				      path="/cart"

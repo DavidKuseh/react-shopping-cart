@@ -4,7 +4,7 @@ import data from './data';
 
 import ProductContext from './contexts/ProductContext';
 import CartContext from './contexts/CartContext';
-
+import {useLocalStorage } from './Hooks/useLocalStorage';
 
 // Components
 import Navigation from './components/Navigation';
@@ -13,17 +13,23 @@ import ShoppingCart from './components/ShoppingCart';
 
 function App() {
 	const [products] = useState(data);
-	const [cart, setCart] = useState([]);
+	const [cart, setCart] = useLocalStorage('cart',[]);
 
 	const addItem = item => {
 		setCart([...cart, item]);
 	};
 
+	const removeItem = (itemId) => {
+		const items = cart.filter(item => item.id !== itemId)
+	  
+		setCart( items )
+	  }
+
 	return (
 		<div className="App">
 			<ProductContext.Provider value={{ products, addItem }}>
-				<CartContext.Provider value={cart}>
-					<Navigation cart={cart} />
+				<CartContext.Provider value={{cart, removeItem}}>
+					<Navigation />
 
 						{/* Routes */}
 						<Route
@@ -36,7 +42,8 @@ function App() {
 
 			         <Route
 				      path="/cart"
-				       render={() => <ShoppingCart cart={cart} />}
+					//    render={() => <ShoppingCart  />}
+					component={ShoppingCart}
 			        />
 				</CartContext.Provider>
 			</ProductContext.Provider>
